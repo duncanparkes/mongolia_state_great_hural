@@ -3,8 +3,10 @@
 
 import scraperwiki
 import requests
+from urlparse import urljoin
 import lxml.html
-response = requests.get("http://www.parliament.mn/en/who?type=3")
+source_url = "http://www.parliament.mn/en/who?type=3"
+response = requests.get(source_url)
 
 root = lxml.html.fromstring(response.content)
 
@@ -12,8 +14,12 @@ cv_divs = root.cssselect("div.cvListItem")
 
 for cv_div in cv_divs:
     name = cv_div.find('div').text_content().strip()
+    image = urljoin(source_url, cv_div.getprevious().get('src'))
 
-    data = {'name': name}
+    data = {
+        'name': name,
+        'image': image,
+        }
 
     ### Scraperwiki saving bits below.
 

@@ -1,16 +1,24 @@
 # This is a template for a Python scraper on morph.io (https://morph.io)
 # including some code snippets below that you should find helpful
 
-# import scraperwiki
-# import lxml.html
-#
-# # Read in a page
-# html = scraperwiki.scrape("http://foo.com")
-#
-# # Find something on the page using css selectors
-# root = lxml.html.fromstring(html)
-# root.cssselect("div[align='left']")
-#
+import scraperwiki
+import requests
+import lxml.html
+response = requests.get("http://www.parliament.mn/en/who?type=3")
+
+root = lxml.html.fromstring(response.content)
+
+cv_divs = root.cssselect("div.cvListItem")
+
+for cv_div in cv_divs:
+    name = cv_div.find('div').text_content().strip()
+
+    data = {'name': name}
+
+    ### Scraperwiki saving bits below.
+
+    scraperwiki.sqlite.save(unique_keys=('name',), data=data)
+
 # # Write out to the sqlite database using scraperwiki library
 # scraperwiki.sqlite.save(unique_keys=['name'], data={"name": "susan", "occupation": "software developer"})
 #

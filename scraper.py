@@ -25,7 +25,7 @@ for type_name, type_id in types:
     # First get all the members in Mongolian
 
     mn_response = requests.get(mn_source_url + query_string)
-    mn_root = lxml.html.fromstring(mn_response.content)
+    mn_root = lxml.html.fromstring(mn_response.text)
 
     cv_divs = mn_root.cssselect("div.cvListItem")
 
@@ -37,7 +37,7 @@ for type_name, type_id in types:
     # Now repeat in English, matching on the images.
 
     en_response = requests.get(en_source_url + query_string)
-    en_root = lxml.html.fromstring(en_response.content)
+    en_root = lxml.html.fromstring(en_response.text)
 
     cv_divs = en_root.cssselect("div.cvListItem")
 

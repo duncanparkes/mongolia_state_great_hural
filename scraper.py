@@ -73,8 +73,6 @@ for cv_list in cv_lists:
 
         image = urljoin(mn_source_url, image_rel)
 
-        # Putting image inside the per member dict as well as using it as a
-        # key to find it for convenience later
         member_dict = members_by_image_url.setdefault(image, {})
 
         cv_div = a.cssselect('div.cvListItem')[0]

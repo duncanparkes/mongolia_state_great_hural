@@ -40,6 +40,22 @@ for cv_list in cv_lists:
         if email.startswith('mailto:'):
             member_dict['email'] = email[7:]
 
+# While we're here, let's see if we can get a list of
+# party names in Mongolian
+parties_by_url = dict(
+    [(urljoin(mn_source_url, x.get('href')), x.text) for x in
+     mn_root.cssselect('#collapseCv5')[0].cssselect('a')]
+    )
+
+for party_url, party_name in parties_by_url.iteritems():
+    party_resp = requests.get(party_url)
+    party_root = lxml.html.fromstring(party_resp.content)
+    cv_images = party_root.cssselect('img#cvImage')
+
+    for x in cv_images:
+        image_url = urljoin(mn_source_url, x.get('src'))
+        members_by_image_url.get(image_url)['party_name_mn'] = party_name
+
 # Now repeat in English, matching on the images.
 
 en_response = requests.get(en_source_url + query_string)
